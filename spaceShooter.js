@@ -1,27 +1,30 @@
-//constants
-var invincibility = false;
-var increaseDifficultyTimer = 3000;
-var spawnIntervalInitial = 3000;
-var runInterval = 10;
-var homingTimerConstant = 0.5;  // time in seconds
+///// constants
+var INVINCIBILITY = false;
+var INCREASE_DIFFICULTY_TIMER = 3000;
+var SPAWN_INTERVAL_INITIAL = 3000;
+var RUN_INTERVAL = 10;
+var HOMING_TIMER_CONSTANT = 0.5;  // time in seconds
 var LEVEL_CHANGE_DURATION = 3000;
-//globals
+///// globals
+var homingTimer = 0;  // time in seconds
+var paused = false;
+var time = Date.now(); // last time run() was called
+// score & killstreak
+var score = 0;
+var killStreakActive = false;
+var killStreak = 10;
+var killCounter = 0;
+// Level handling
+var spawnInterval = SPAWN_INTERVAL_INITIAL;
 var displayLevelText = false;
 var level = 0;
 var levelChange = true;
 var enemyCount = 0;
-var homingTimer = 0;  // time in seconds
-var score = 0
-var killStreakActive = false;
-var killStreak = 10;
-var killCounter = 0;
-var spawnInterval = spawnIntervalInitial;
-var paused = false;
+var enemyLimit = [1,7,13,15,18,22,29,34,40,55]; // # enemies spawned per level
+// Entity handling
+var entities = [];
 var keysDown = {};
 var keysUp = {};
-var time = Date.now();
-var limit = [1,7,13,15,18,22,29,34,40,55];
-var entities = [];
 var player = {
     x: 400,
     y: 250,
@@ -131,7 +134,7 @@ function render() {
 function moveEntities(mod) {
     homingTimer += mod;
     var shouldFindTarget = false;
-    if (homingTimer >= homingTimerConstant) {
+    if (homingTimer >= HOMING_TIMER_CONSTANT) {
         shouldFindTarget = true;
         homingTimer = 0;
     }
@@ -238,7 +241,7 @@ function handleKeys(mod) {
         spawnInterval = spawnInterval * 2;
     } 
     if (48 in keysDown) { // 0 (dev code)
-        spawnInterval = spawnIntervalInitial;
+        spawnInterval = SPAWN_INTERVAL_INITIAL;
     }
     if (13 in keysDown) { // enter (dev code)
         paused = true;
@@ -314,7 +317,7 @@ function removeCollided() {
     }
 }
 function gameOver() {
-    if (invincibility) {
+    if (INVINCIBILITY) {
         return;
     }
     paused = true;
@@ -417,8 +420,8 @@ function spawnEnemy() {
     addEntity(enemy);
     enemyCount++;
     console.log(enemyCount);
-    if (enemyCount >= limit[0]) {
-        limit.shift();
+    if (enemyCount >= enemyLimit[0]) {
+        enemyLimit.shift();
         levelChange = true;
     }
 }
@@ -460,8 +463,8 @@ function init_() {
     addEntity(player);
     
     spawnTimer();
-    //setInterval(increaseDifficulty,increaseDifficultyTimer);
-    setInterval(run, runInterval);
+    //setInterval(increaseDifficulty,INCREASE_DIFFICULTY_TIMER);
+    setInterval(run, RUN_INTERVAL);
     
     document.body.style.cursor = 'crosshair';
     
