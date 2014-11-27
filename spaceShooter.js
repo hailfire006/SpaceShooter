@@ -169,7 +169,7 @@ function findClosestEnemy(entity) {
             if (entity != entities[i] && !entities[i].friendly && !entities[i].targeted) {
                 //find distance to other entity
                 var dist = distanceBetween(entity,entities[i]);
-                console.log(closestEntityDistance);
+                // console.log(closestEntityDistance);
                 if (!closestEntityDistance || dist < closestEntityDistance) {
                     closestEntityDistance = dist;
                     closestEntity = entities[i];
@@ -419,7 +419,7 @@ function spawnEnemy() {
     }
     addEntity(enemy);
     enemyCount++;
-    console.log(enemyCount);
+    // console.log(enemyCount);
     if (enemyCount >= enemyLimit[0]) {
         enemyLimit.shift();
         levelChange = true;
@@ -459,7 +459,7 @@ function increaseDifficulty(n) {
     spawnInterval = spawnInterval * n;
 }
 function init_() {
-    console.log(canvas.width, canvas.height);
+    // console.log(canvas.width, canvas.height);
     addEntity(player);
     
     spawnTimer();
@@ -468,14 +468,14 @@ function init_() {
     
     document.body.style.cursor = 'crosshair';
     
-    canvas.addEventListener("mousedown", false);
+    //canvas.addEventListener("mousedown", false);
     canvas.addEventListener('click', function(e) {
         var bodyRect = document.body.getBoundingClientRect();
         var canvasRect = canvas.getBoundingClientRect();
         var canvasOffsetY = canvasRect.top;
         var canvasOffsetX = canvasRect.left;
-        console.log(canvasRect.top);
-        console.log(canvasRect.left);
+        // console.log(canvasRect.top);
+        // console.log(canvasRect.left);
         var pos = {
            x : e.pageX - canvasOffsetX,
            y : e.pageY - canvasOffsetY
